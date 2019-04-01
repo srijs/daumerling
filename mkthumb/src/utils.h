@@ -17,11 +17,14 @@ static inline size_t aligned_size(size_t size, size_t align) {
 // Convert a row of BGRA pixels to RGB, blending with a black background.
 static inline void row_bgra_to_rgb(const uint8_t *bgra_row, int width,
                                    uint8_t *rgb_row) {
+  uint8_t blend_r = 255;
+  uint8_t blend_g = 255;
+  uint8_t blend_b = 255;
   for (int i = 0; i < width; i++) {
     float alpha = (float)bgra_row[i * 4 + 3] / 255.0;
-    rgb_row[i * 3 + 0] = bgra_row[i * 4 + 2] * alpha;
-    rgb_row[i * 3 + 1] = bgra_row[i * 4 + 1] * alpha;
-    rgb_row[i * 3 + 2] = bgra_row[i * 4 + 0] * alpha;
+    rgb_row[i * 3 + 0] = blend_r * (1 - alpha) + bgra_row[i * 4 + 2] * alpha;
+    rgb_row[i * 3 + 1] = blend_g * (1 - alpha) + bgra_row[i * 4 + 1] * alpha;
+    rgb_row[i * 3 + 2] = blend_b * (1 - alpha) + bgra_row[i * 4 + 0] * alpha;
   }
 }
 
